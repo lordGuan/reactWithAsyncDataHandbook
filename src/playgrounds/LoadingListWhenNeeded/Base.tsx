@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {getList, ListItem} from "../../api";
 import Card from "../../components/Card";
 import Table from "../../components/Table";
@@ -7,7 +7,7 @@ function BaseLoadingList() {
     const [loading, setLoading] = useState(false)
     const [list, setList] = useState<ListItem[]>([])
 
-    useEffect(() => {
+    const handleLoad = () => {
         setLoading(true)
 
         getList().then((res) => {
@@ -15,18 +15,20 @@ function BaseLoadingList() {
         }).finally(() => {
             setLoading(false)
         })
-    }, [])
+    }
+
+    const Header = <>
+        <p>Base</p>
+        <button onClick={handleLoad}>Load</button>
+    </>
 
     const Desc = (<>
         <p>
-            你需要两个状态，一个是 loading，一个是 list。当存在多个需要loading的时候，你需要多个loading状态。
-        </p>
-        <p>
-            很多时候可能忘记catch的时候也应当取消loading
+            完全依赖手动触发还是比较简单的
         </p>
     </>)
 
-    return <Card header={'Base'} footer={Desc}>
+    return <Card header={Header} footer={Desc}>
         {loading ?
             <div>Loading...</div> :
             <Table cols={[{label: 'Index', index: 'id'}, {label: 'Name', index: 'name'}]} list={list}/>
